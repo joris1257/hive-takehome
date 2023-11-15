@@ -1,6 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 import { AppComponent } from './app.component';
-import { NxWelcomeComponent } from './nx-welcome.component';
+import { NxWelcomeComponent } from './cpu_reporting/cpu.component';
 import { RouterTestingModule } from '@angular/router/testing';
 
 describe('AppComponent', () => {

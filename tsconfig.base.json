@@ -14,7 +14,10 @@
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
-    "paths": {}
+    "paths": {
+      "@angular-monorepo/shared-types": ["apps/shared-types/src/index.ts"],
+      "@angular-monorepo/shares-types": ["shares-types/src/index.ts"]
+    }
   },
   "exclude": ["node_modules", "tmp"]
 }
