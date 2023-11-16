@@ -1,0 +1,22 @@
+{
+    "scripts": {
+        "tauri": "tauri",
+        "start": "npm run tauri:serve",
+        "tauri:serve": "tauri dev",
+        "web:serve": "nx serve tauri-cpu",
+        "web:build": "ng build --base-href ./",
+        "web:dev": "npm run web:build",
+        "web:prod": "npm run web:build -- -c production",
+        "tauri:bundle": "tauri build",
+        "test": "ng test --watch=false",
+        "test:watch": "ng test",
+        "version": "conventional-changelog -i CHANGELOG.md -s -r 0 && git add CHANGELOG.md",
+        "lint": "ng lint"
+    },
+    "devDependencies": {
+        "@tauri-apps/cli": "^1.5.6"
+    },
+    "dependencies": {
+        "@tauri-apps/api": "^1.5.1"
+    }
+}

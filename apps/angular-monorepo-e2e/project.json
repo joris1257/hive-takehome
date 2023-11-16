@@ -9,14 +9,14 @@
       "options": {
         "cypressConfig": "apps/angular-monorepo-e2e/cypress.config.ts",
         "testingType": "e2e",
-        "devServerTarget": "angular-monorepo:serve:development"
+        "devServerTarget": "cpu-angular:serve:development"
       },
       "configurations": {
         "production": {
-          "devServerTarget": "angular-monorepo:serve:production"
+          "devServerTarget": "cpu-angular:serve:production"
         },
         "ci": {
-          "devServerTarget": "angular-monorepo:serve-static"
+          "devServerTarget": "cpu-angular:serve-static"
         }
       }
     },
@@ -29,5 +29,5 @@
     }
   },
   "tags": [],
-  "implicitDependencies": ["angular-monorepo"]
+  "implicitDependencies": ["cpu-angular"]
 }
