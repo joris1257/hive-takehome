@@ -1,13 +1,13 @@
 {
-  "name": "angular-monorepo-e2e",
+  "name": "tauri-cpu-e2e",
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "projectType": "application",
-  "sourceRoot": "apps/angular-monorepo-e2e/src",
+  "sourceRoot": "apps/tauri-cpu-e2e/src",
   "targets": {
     "e2e": {
       "executor": "@nx/cypress:cypress",
       "options": {
-        "cypressConfig": "apps/angular-monorepo-e2e/cypress.config.ts",
+        "cypressConfig": "apps/tauri-cpu-e2e/cypress.config.ts",
         "testingType": "e2e",
         "devServerTarget": "cpu-angular:serve:development"
       },
@@ -22,12 +22,18 @@
     },
     "lint": {
       "executor": "@nx/eslint:lint",
-      "outputs": ["{options.outputFile}"],
+      "outputs": [
+        "{options.outputFile}"
+      ],
       "options": {
-        "lintFilePatterns": ["apps/angular-monorepo-e2e/**/*.{js,ts}"]
+        "lintFilePatterns": [
+          "apps/tauri-cpu-e2e/**/*.{js,ts}"
+        ]
       }
     }
   },
   "tags": [],
-  "implicitDependencies": ["cpu-angular"]
+  "implicitDependencies": [
+    "cpu-angular"
+  ]
 }

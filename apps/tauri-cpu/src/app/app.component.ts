@@ -1,10 +1,10 @@
 import { Component } from '@angular/core';
 import { RouterModule } from '@angular/router';
-import { NxWelcomeComponent } from './cpu_reporting/cpu.component';
+import { CpuComponent } from './cpu_reporting/cpu.component';
 
 @Component({
   standalone: true,
-  imports: [NxWelcomeComponent, RouterModule],
+  imports: [CpuComponent, RouterModule],
   selector: 'angular-monorepo-root',
   templateUrl: './app.component.html',
 })

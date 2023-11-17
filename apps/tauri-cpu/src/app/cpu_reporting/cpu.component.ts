@@ -23,7 +23,7 @@ import { listen } from '@tauri-apps/api/event';
   templateUrl: './cpu.component.html',
   encapsulation: ViewEncapsulation.None,
 })
-export class NxWelcomeComponent implements OnDestroy, OnInit {
+export class CpuComponent implements OnDestroy, OnInit {
   constructor(private http: CpuService, private zone: NgZone) {
     effect(async () => {
       localStorage.setItem('isToggled', JSON.stringify(this.isToggled()));
