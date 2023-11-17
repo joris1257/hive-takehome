@@ -9,6 +9,7 @@ import * as bodyParser from 'body-parser';
 import cors from 'cors';
 import { db } from './db';
 import { cpuUsage } from './db/schema';
+import { CpuRequest } from '@angular-monorepo/shared-types';
 
 const app = express();
 
@@ -16,23 +17,20 @@ const jsonParser = bodyParser.json();
 
 app.use('/assets', express.static(path.join(__dirname, 'assets')));
 app.use(cors());
+app.use(jsonParser);
 
 app.get('/api', (req, res) => {
   res.send({ message: 'Welcome to api!' });
 });
 
-export interface CpuUsage {
-  cpuUsage: number;
-  timeStamp: string;
-}
 app.post(
   '/api',
-  jsonParser,
-  async (req: Request<undefined, string, { message: CpuUsage[] }>, res) => {
+  async (req: Request<undefined, string, { message: CpuRequest }>, res) => {
     // console.log('post');
     console.log(req.body.message);
     const result = await db.insert(cpuUsage).values(
-      req.body.message.map((x) => ({
+      req.body.message.cpuUsage.map((x) => ({
+        userId: req.body.message.userId,
         usage: x.cpuUsage,
         timestamp: new Date(x.timeStamp),
       }))

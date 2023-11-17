@@ -4,7 +4,6 @@
 )]
 
 mod utils;
-use spin_sleep::LoopHelper;
 use std::thread;
 use std::time::Duration;
 use sysinfo::{ProcessExt, System, SystemExt};
@@ -41,7 +40,7 @@ fn init_cpu(window: Window) {
                 )
                 .unwrap();
         }
-        thread::sleep(Duration::from_secs(3))
+        thread::sleep(Duration::from_secs(1))
     });
 }
 

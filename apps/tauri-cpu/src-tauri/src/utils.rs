@@ -7,7 +7,7 @@ pub(crate) fn induce_high_cpu_usage(duration_secs: u64) {
     // Run a loop for the specified duration
     while start_time.elapsed().as_secs() < duration_secs {
         // Perform some CPU-intensive calculations
-        let result: u64 = (0..1_000_000).map(|x| x * x).sum();
+        let _result: u64 = (0..1_000_000).map(|x| x * x).sum();
 
         // Print the result to avoid compiler optimizations
 

@@ -8,8 +8,8 @@ import {
   NgZone,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Observable } from 'rxjs';
-import { bufferCount, filter, tap } from 'rxjs/operators';
+import { Observable, interval } from 'rxjs';
+import { catchError, filter, map, tap } from 'rxjs/operators';
 import { CpuService } from '../cpu.service';
 import { CpuUsage } from '@angular-monorepo/shared-types';
 import { environment } from '../../environments/environment';
@@ -39,6 +39,7 @@ export class CpuComponent implements OnDestroy, OnInit {
         cpuUsage: parseFloat(eventPayload.cpu_usage),
         timeStamp: new Date().toISOString(),
       };
+
       this.zone.run(() => {
         observer.next(cpuUsage);
       });
@@ -47,18 +48,71 @@ export class CpuComponent implements OnDestroy, OnInit {
     return async () => {
       (await unlisten)();
     };
-  });
+  }).pipe(
+    tap((cpuUsage) => {
+      if (environment.production && this.isToggled()) {
+        this.storeCpuValues([cpuUsage]);
+      }
+    })
+  );
 
-  cpuReporting$ = this.cpuUsage$
+  storeCpuValues = (cpuUsage: CpuUsage[]) => {
+    const storedValues =
+      (JSON.parse(
+        localStorage.getItem('storedCpuValues') ?? '[]'
+      ) as CpuUsage[]) || [];
+    storedValues.push(...cpuUsage);
+    localStorage.setItem('storedCpuValues', JSON.stringify(storedValues));
+  };
+
+  cpuReporting$ = interval(3000)
     .pipe(
-      bufferCount(5),
-      filter(() => this.isToggled()),
-      filter(() => environment.production),
+      filter(() => this.isToggled() && environment.production),
+      map(() => {
+        const storedValues =
+          (JSON.parse(
+            localStorage.getItem('storedCpuValues') ?? '[]'
+          ) as CpuUsage[]) || [];
+        // Clearing it in this way may result in data loss
+        localStorage.removeItem('storedCpuValues');
+
+        // TODO: Replace with user ID from authentication service in real app
+        return {
+          userId: '1',
+          cpuUsage: storedValues,
+        };
+      }),
       tap((cpuUsage) => {
-        this.http.post(cpuUsage).subscribe((e) => console.log(e));
+        this.http
+          .post(cpuUsage)
+          .pipe(
+            catchError((e) => {
+              this.storeCpuValues(cpuUsage.cpuUsage);
+              return e;
+            })
+          )
+          .subscribe();
       })
     )
     .subscribe();
+
+  // this.cpuUsage$
+  //   .pipe(
+  //     bufferCount(5),
+  //     filter(() => this.isToggled()),
+  //     filter(() => environment.production),
+  //     map((cpuUsage) => {
+  //       // TODO: Replace with user ID from authentication service in real app
+  //       return {
+  //         userId: '1',
+  //         cpuUsage,
+  //       };
+  //     }),
+  //     tap((cpuUsage) => {
+  //       this.http.post(cpuUsage).subscribe((e) => console.log(e));
+  //     })
+  //   )
+  //   .subscribe();
 
   toggleValue() {
     this.isToggled.update((cur) => !cur);
@@ -70,13 +124,5 @@ export class CpuComponent implements OnDestroy, OnInit {
 
   ngOnInit(): void {
     invoke('init_cpu');
-  }
-
-  getCpuUsage(): CpuUsage {
-    // Simulating CPU usage data for demonstration purposes
-    const simulatedUsage = Math.random() * 100;
-    const timeStamp = new Date().toISOString();
-
-    return { cpuUsage: simulatedUsage, timeStamp };
   }
 }

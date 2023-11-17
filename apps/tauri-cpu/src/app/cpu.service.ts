@@ -1,17 +1,17 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { CpuUsage } from '@angular-monorepo/shared-types';
+import { CpuRequest } from '@angular-monorepo/shared-types';
 
 @Injectable({ providedIn: 'root' })
 export class CpuService {
-  private readonly baseUrl: string = 'http://localhost:3333/api';
+  private readonly baseUrl: string = 'http://localhost:3333';
 
   constructor(private http: HttpClient) {}
 
-  post = (data: CpuUsage[] | CpuUsage): Observable<unknown> =>
+  post = (data: CpuRequest): Observable<unknown> =>
     this.http.post(
-      `${this.baseUrl}`,
+      `${this.baseUrl}/api`,
       {
         message: data,
       },
